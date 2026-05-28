@@ -62,7 +62,7 @@ export default function AdminShellClient({ children, userEmail }: AdminShellClie
   ];
 
   return (
-    <div className="min-h-screen flex bg-background font-sans">
+    <div className="h-screen flex bg-background font-sans overflow-hidden">
       {/* ── MOBILE BACKDROP ── */}
       {isMobileOpen && (
         <div 
@@ -211,7 +211,7 @@ export default function AdminShellClient({ children, userEmail }: AdminShellClie
         </header>
 
         {/* Dynamic page content */}
-        <main className="flex-1 p-6 sm:p-8 overflow-y-auto max-w-7xl w-full mx-auto">
+        <main className="flex-1 p-6 sm:p-8 overflow-y-auto scrollbar-hide max-w-7xl w-full mx-auto">
           {children}
         </main>
       </div>

@@ -99,8 +99,14 @@ export default function AdDetails({ ad, categorySlug }: AdDetailsProps) {
   // Dialpad and WhatsApp share links
   const dialpadUrl = `tel:${ad.phone}`;
   const whatsappUrl = `https://wa.me/${ad.phone.replace(/[^0-9]/g, "")}`;
-  const shareTwitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(typeof window !== "undefined" ? window.location.href : "")}&text=${encodeURIComponent(ad.title)}`;
-  const shareWhatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(ad.title + " " + (typeof window !== "undefined" ? window.location.href : ""))}`;
+
+  // Share URLs need window.location, which is client-only — compute after mount to avoid hydration mismatch
+  const [pageUrl, setPageUrl] = useState("");
+  useEffect(() => {
+    setPageUrl(window.location.href);
+  }, []);
+  const shareTwitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(pageUrl)}&text=${encodeURIComponent(ad.title)}`;
+  const shareWhatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(ad.title + " " + pageUrl)}`;
 
   return (
     <div className="flex flex-col min-h-screen bg-white font-sans text-gray-800">

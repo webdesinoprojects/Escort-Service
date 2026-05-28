@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { X, ChevronDown, ChevronRight, Globe, Flag, Smile, MapPin, Eye, User, Sparkles } from "lucide-react";
+import { getCategories } from "@/server/actions/admin";
 
 interface FilterModalProps {
   isOpen: boolean;
@@ -10,6 +11,19 @@ interface FilterModalProps {
   initialCategory?: string;
   initialCity?: string;
 }
+
+interface CategoryOption {
+  slug: string;
+  title: string;
+}
+
+const FALLBACK_CATEGORIES: CategoryOption[] = [
+  { slug: "call-girls", title: "Call Girls" },
+  { slug: "massage", title: "Massage" },
+  { slug: "male-escorts", title: "Male Escorts" },
+  { slug: "transsexual", title: "Transsexual" },
+  { slug: "adult-meetings", title: "Adult Meetings" },
+];
 
 const REGIONS = [
   "Andaman And Nicobar Islands",
@@ -91,10 +105,22 @@ export default function FilterModal({ isOpen, onClose, initialCategory, initialC
 
   // Primary drop-down states
   const [category, setCategory] = useState("call-girls");
+  const [categoryOptions, setCategoryOptions] = useState<CategoryOption[]>(FALLBACK_CATEGORIES);
   const [searchText, setSearchText] = useState("");
   const [region, setRegion] = useState("");
   const [city, setCity] = useState("");
   const [area, setArea] = useState("");
+
+  // Load categories from DB on mount
+  useEffect(() => {
+    getCategories().then((cats: any[]) => {
+      if (cats && cats.length > 0) {
+        setCategoryOptions(cats.map((c) => ({ slug: c.slug, title: c.title })));
+      }
+    }).catch(() => {
+      // Keep fallback on error
+    });
+  }, []);
 
   // Accordion filter states
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
@@ -302,11 +328,11 @@ export default function FilterModal({ isOpen, onClose, initialCategory, initialC
                   onChange={(e) => setCategory(e.target.value)}
                   className="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm font-semibold text-gray-700 bg-white hover:border-gray-300 transition-colors outline-none appearance-none cursor-pointer"
                 >
-                  <option value="call-girls">Call Girls</option>
-                  <option value="massage">Massage</option>
-                  <option value="male-escorts">Male Escorts</option>
-                  <option value="transsexual">Transsexual</option>
-                  <option value="adult-meetings">Adult Meetings</option>
+                  {categoryOptions.map((opt) => (
+                    <option key={opt.slug} value={opt.slug}>
+                      {opt.title}
+                    </option>
+                  ))}
                 </select>
                 <ChevronDown className="w-4 h-4 text-gray-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>

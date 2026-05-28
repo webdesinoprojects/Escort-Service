@@ -13,7 +13,12 @@ export const listingSchema = z.object({
   status: z.enum(["published", "archived", "draft"]).default("draft"),
   category_id: z.string().uuid("Invalid category selected"),
   city_id: z.string().uuid("Invalid location/city selected"),
-  images: z.array(z.string().url("Invalid image URL")).min(1, "At least 1 image is required").max(7, "Maximum 7 images allowed"),
+  images: z.array(
+    z.string().refine(
+      (val) => val.startsWith("/") || /^https?:\/\//i.test(val),
+      "Image must be an absolute URL or a path starting with /"
+    )
+  ).min(1, "At least 1 image is required").max(7, "Maximum 7 images allowed"),
   about_me: z.array(z.string()).default([]),
   tags: z.array(z.string()).default([]),
   services: z.array(z.string()).default([]),

@@ -333,11 +333,15 @@ export async function getAdminListings({
   limit = 15,
   status,
   search = "",
+  sort = "updated_desc",
+  dateRange = "all",
 }: {
   page?: number;
   limit?: number;
   status?: string;
   search?: string;
+  sort?: "updated_desc" | "created_desc" | "created_asc";
+  dateRange?: "all" | "today" | "7d" | "30d";
 }) {
   try {
     await assertAdmin();
@@ -356,10 +360,22 @@ export async function getAdminListings({
       query = query.or(`title.ilike.${q},name.ilike.${q},ad_id.ilike.${q}`);
     }
 
-    // Sort: newest first
-    query = query.order("created_at", { ascending: false });
+    if (dateRange !== "all") {
+      const days = dateRange === "today" ? 1 : dateRange === "7d" ? 7 : 30;
+      const since = new Date();
+      since.setDate(since.getDate() - (days - 1));
+      since.setHours(0, 0, 0, 0);
+      query = query.gte("created_at", since.toISOString());
+    }
 
-    // Pagination
+    if (sort === "created_desc") {
+      query = query.order("created_at", { ascending: false });
+    } else if (sort === "created_asc") {
+      query = query.order("created_at", { ascending: true });
+    } else {
+      query = query.order("updated_at", { ascending: false });
+    }
+
     const from = (page - 1) * limit;
     const to = from + limit - 1;
     query = query.range(from, to);
@@ -404,7 +420,13 @@ export async function getListingForEdit(id: string) {
 export async function upsertListing(formData: any) {
   try {
     await assertAdmin();
-    const parsed = listingSchema.parse(formData);
+    const parseResult = listingSchema.safeParse(formData);
+    if (!parseResult.success) {
+      const firstIssue = parseResult.error.issues[0];
+      const path = firstIssue?.path?.join(".") || "field";
+      return { success: false, error: `${path}: ${firstIssue?.message || "Invalid input"}` };
+    }
+    const parsed = parseResult.data;
     const supabase = createAdminClient();
 
     let result;

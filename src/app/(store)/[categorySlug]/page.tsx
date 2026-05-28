@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import CategoryDetails from "./CategoryDetails";
+import { createClient } from "@/server/db/supabase";
 
 interface PageProps {
   params: Promise<{
@@ -8,34 +9,24 @@ interface PageProps {
   }>;
 }
 
-export async function generateStaticParams() {
-  return [
-    { categorySlug: "call-girls" },
-    { categorySlug: "massage" },
-    { categorySlug: "male-escorts" },
-    { categorySlug: "transsexual" },
-    { categorySlug: "adult-meetings" }
-  ];
-}
-
 export default async function Page({ params }: PageProps) {
   const { categorySlug } = await params;
-  
-  // Normalize singular categories to plural
   const normalized = categorySlug.toLowerCase();
-  if (normalized === "call-girl") {
-    redirect("/call-girls");
-  }
-  if (normalized === "male-escort") {
-    redirect("/male-escorts");
-  }
-  if (normalized === "adult-meeting") {
-    redirect("/adult-meetings");
-  }
 
-  // Ensure only valid categories are rendered, otherwise fallback to home
-  const validSlugs = ["call-girls", "massage", "male-escorts", "transsexual", "adult-meetings"];
-  if (!validSlugs.includes(normalized)) {
+  // Normalize singular categories to plural
+  if (normalized === "call-girl") redirect("/call-girls");
+  if (normalized === "male-escort") redirect("/male-escorts");
+  if (normalized === "adult-meeting") redirect("/adult-meetings");
+
+  // Validate against DB categories
+  const supabase = await createClient();
+  const { data: category } = await supabase
+    .from("categories")
+    .select("slug")
+    .eq("slug", normalized)
+    .maybeSingle();
+
+  if (!category) {
     redirect("/");
   }
 

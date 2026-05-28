@@ -22,7 +22,9 @@ import {
   Loader2,
   Crown,
   MapPin,
-  ExternalLink
+  ExternalLink,
+  Filter,
+  X,
 } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
@@ -34,6 +36,9 @@ export default function ListingsTableClient() {
   // Search & Filters
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
+  const [sort, setSort] = useState<"updated_desc" | "created_desc" | "created_asc">("updated_desc");
+  const [dateRange, setDateRange] = useState<"all" | "today" | "7d" | "30d">("all");
+  const [showFilters, setShowFilters] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
   // Data
@@ -47,8 +52,10 @@ export default function ListingsTableClient() {
     getAdminListings({
       page: currentPage,
       limit: 15,
-      status: status,
-      search: search,
+      status,
+      search,
+      sort,
+      dateRange,
     }).then((res: any) => {
       if (res.error) {
         toast.error(res.error);
@@ -63,7 +70,14 @@ export default function ListingsTableClient() {
 
   useEffect(() => {
     fetchListings();
-  }, [currentPage, status]);
+  }, [currentPage, status, sort, dateRange]);
+
+  const activeFilterCount = (sort !== "updated_desc" ? 1 : 0) + (dateRange !== "all" ? 1 : 0);
+  const clearFilters = () => {
+    setSort("updated_desc");
+    setDateRange("all");
+    setCurrentPage(1);
+  };
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -155,7 +169,7 @@ export default function ListingsTableClient() {
           </button>
         </form>
 
-        <div className="flex items-center gap-3 w-full md:w-auto shrink-0 justify-end">
+        <div className="flex items-center gap-3 w-full md:w-auto shrink-0 justify-end relative">
           <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider hidden sm:block">Status</label>
           <select
             value={status}
@@ -167,6 +181,80 @@ export default function ListingsTableClient() {
             <option value="draft">Drafts</option>
             <option value="archived">Archived</option>
           </select>
+
+          <button
+            type="button"
+            onClick={() => setShowFilters((v) => !v)}
+            className={`relative flex items-center gap-1.5 border rounded-xl py-2.5 px-4 text-sm font-bold transition-colors cursor-pointer font-sans ${
+              activeFilterCount > 0
+                ? "bg-[#cf4f41]/10 border-[#cf4f41] text-[#cf4f41]"
+                : "bg-background border-border/80 text-foreground hover:bg-muted"
+            }`}
+          >
+            <Filter className="w-4 h-4" />
+            <span>Filter</span>
+            {activeFilterCount > 0 && (
+              <span className="ml-1 inline-flex items-center justify-center text-[10px] font-bold bg-[#cf4f41] text-white rounded-full w-4 h-4">
+                {activeFilterCount}
+              </span>
+            )}
+          </button>
+
+          {showFilters && (
+            <div className="absolute right-0 top-full mt-2 w-72 bg-card border border-border rounded-2xl shadow-lg p-4 z-20 space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold uppercase tracking-wider text-foreground">Filters</span>
+                <button
+                  type="button"
+                  onClick={() => setShowFilters(false)}
+                  className="p-1 hover:bg-muted rounded-md cursor-pointer"
+                >
+                  <X className="w-3.5 h-3.5 text-muted-foreground" />
+                </button>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
+                  Sort by
+                </label>
+                <select
+                  value={sort}
+                  onChange={(e) => { setSort(e.target.value as any); setCurrentPage(1); }}
+                  className="w-full bg-background border border-border/80 rounded-xl py-2 px-3 text-sm outline-none focus:border-[#cf4f41] cursor-pointer"
+                >
+                  <option value="updated_desc">Recently Updated</option>
+                  <option value="created_desc">Newest Created</option>
+                  <option value="created_asc">Oldest Created</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
+                  Date Created
+                </label>
+                <select
+                  value={dateRange}
+                  onChange={(e) => { setDateRange(e.target.value as any); setCurrentPage(1); }}
+                  className="w-full bg-background border border-border/80 rounded-xl py-2 px-3 text-sm outline-none focus:border-[#cf4f41] cursor-pointer"
+                >
+                  <option value="all">All Time</option>
+                  <option value="today">Today</option>
+                  <option value="7d">Last 7 days</option>
+                  <option value="30d">Last 30 days</option>
+                </select>
+              </div>
+
+              {activeFilterCount > 0 && (
+                <button
+                  type="button"
+                  onClick={clearFilters}
+                  className="w-full text-xs font-bold text-[#cf4f41] hover:bg-[#cf4f41]/10 py-2 rounded-lg cursor-pointer"
+                >
+                  Clear Filters
+                </button>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
@@ -216,13 +304,13 @@ export default function ListingsTableClient() {
                       </div>
                     </td>
                     <td className="py-4 font-mono font-bold text-xs text-[#cf4f41]">{row.ad_id}</td>
-                    <td className="py-4 truncate max-w-[200px]">
-                      <div className="flex flex-col">
-                        <span className="font-bold flex items-center gap-1">
-                          {row.title}
-                          {row.is_vip && <span title="VIP Listing"><Crown className="w-3.5 h-3.5 text-amber-500 fill-amber-500" /></span>}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
+                    <td className="py-4 pr-4 max-w-[280px]">
+                      <div className="flex flex-col min-w-0">
+                        <div className="flex items-center gap-1 min-w-0">
+                          <span className="font-bold truncate" title={row.title}>{row.title}</span>
+                          {row.is_vip && <span title="VIP Listing" className="shrink-0"><Crown className="w-3.5 h-3.5 text-amber-500 fill-amber-500" /></span>}
+                        </div>
+                        <span className="text-xs text-muted-foreground truncate">
                           {row.name ? `${row.name}, ` : ""}Age: {row.age || "N/A"}
                         </span>
                       </div>
