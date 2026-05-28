@@ -1,0 +1,25 @@
+-- OKLUTE CATEGORY CLICKS TRACKING CONTEXT
+-- ----------------------------------------------------
+-- This context file contains the SQL statements and information for tracking category clicks/views.
+-- 
+-- How it works:
+-- 1. Storefront queries listings by category slug via fetchListings() in src/lib/api/listings.ts.
+-- 2. When a category is queried, it calls a Supabase RPC function increment_category_clicks(cat_id) in the background.
+-- 3. The RPC function increments the clicks count for that category in the database.
+-- 4. The admin panel displays the category clicks inside the Categories Administration table.
+
+-- SQL Portion to run in Supabase SQL Editor:
+-- ----------------------------------------------------
+
+-- 1. Add clicks column to public.categories:
+ALTER TABLE public.categories ADD COLUMN IF NOT EXISTS clicks INT DEFAULT 0 NOT NULL;
+
+-- 2. Create the security definer function to allow safe incrementation of category clicks:
+CREATE OR REPLACE FUNCTION public.increment_category_clicks(cat_id UUID)
+RETURNS VOID AS $$
+BEGIN
+    UPDATE public.categories
+    SET clicks = clicks + 1
+    WHERE id = cat_id;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
