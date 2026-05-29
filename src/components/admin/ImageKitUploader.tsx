@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { Upload, X, Loader2, Image as ImageIcon } from "lucide-react";
+import { Upload, X, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { toast } from "sonner";
 
@@ -9,13 +9,28 @@ interface ImageKitUploaderProps {
   value: string;
   onChange: (url: string) => void;
   folder?: string;
+  onUploadingChange?: (isUploading: boolean) => void;
+  disabled?: boolean;
 }
 
-export default function ImageKitUploader({ value, onChange, folder = "oklute" }: ImageKitUploaderProps) {
+export default function ImageKitUploader({
+  value,
+  onChange,
+  folder = "oklute",
+  onUploadingChange,
+  disabled = false,
+}: ImageKitUploaderProps) {
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const setUploadState = (nextUploading: boolean) => {
+    setIsUploading(nextUploading);
+    onUploadingChange?.(nextUploading);
+  };
+
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (disabled || isUploading) return;
+
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
@@ -33,7 +48,7 @@ export default function ImageKitUploader({ value, onChange, folder = "oklute" }:
       return;
     }
 
-    setIsUploading(true);
+    setUploadState(true);
     const toastId = toast.loading("Uploading image to ImageKit...");
 
     try {
@@ -70,18 +85,22 @@ export default function ImageKitUploader({ value, onChange, folder = "oklute" }:
       // 4. Return URL
       onChange(uploadData.url);
       toast.success("Image uploaded successfully!", { id: toastId });
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Failed to upload image.";
       console.error("ImageKit upload error:", err);
-      toast.error(err.message || "Failed to upload image.", { id: toastId });
+      toast.error(message, { id: toastId });
     } finally {
-      setIsUploading(false);
+      setUploadState(false);
       if (fileInputRef.current) fileInputRef.current.value = "";
     }
   };
 
   const handleClear = () => {
+    if (disabled || isUploading) return;
     onChange("");
   };
+
+  const isDisabled = disabled || isUploading;
 
   return (
     <div className="space-y-4 select-none">
@@ -110,6 +129,7 @@ export default function ImageKitUploader({ value, onChange, folder = "oklute" }:
           <button
             type="button"
             onClick={handleClear}
+            disabled={isDisabled}
             className="absolute top-2 right-2 p-1.5 rounded-full bg-black/70 hover:bg-black/90 text-white transition-colors cursor-pointer opacity-0 group-hover:opacity-100"
           >
             <X className="w-4 h-4" />
@@ -117,9 +137,9 @@ export default function ImageKitUploader({ value, onChange, folder = "oklute" }:
         </div>
       ) : (
         <div 
-          onClick={() => !isUploading && fileInputRef.current?.click()}
+          onClick={() => !isDisabled && fileInputRef.current?.click()}
           className={`aspect-video w-full max-w-sm border-2 border-dashed border-border/80 hover:border-[#cf4f41] rounded-xl flex flex-col items-center justify-center cursor-pointer transition-all hover:bg-muted/40 bg-card p-4 text-center
-            ${isUploading ? "pointer-events-none opacity-50" : ""}
+            ${isDisabled ? "pointer-events-none opacity-50" : ""}
           `}
         >
           {isUploading ? (
@@ -143,6 +163,7 @@ export default function ImageKitUploader({ value, onChange, folder = "oklute" }:
         ref={fileInputRef}
         onChange={handleUpload}
         accept="image/*"
+        disabled={isDisabled}
         className="hidden"
       />
     </div>

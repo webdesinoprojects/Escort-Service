@@ -17,10 +17,64 @@ import { toast } from "sonner";
 import Image from "next/image";
 
 interface ListingEditorClientProps {
-  listing: any;
-  categories: any[];
-  cities: any[];
+  listing: ListingRecord | null;
+  categories: ListingCategory[];
+  cities: ListingCity[];
   isNew: boolean;
+}
+
+interface ListingCategory {
+  id: string;
+  title: string;
+  slug?: string | null;
+}
+
+interface ListingCity {
+  id: string;
+  name: string;
+  state_name: string;
+}
+
+interface ListingRecord {
+  id?: string;
+  ad_id?: string;
+  title?: string | null;
+  name?: string | null;
+  age?: number | null;
+  description?: string | null;
+  phone?: string | null;
+  whatsapp?: string | null;
+  is_vip?: boolean | null;
+  status?: string | null;
+  category_id?: string | null;
+  city_id?: string | null;
+  ethnicity?: string | null;
+  nationality?: string | null;
+  breast?: string | null;
+  hair?: string | null;
+  body_type?: string | null;
+  images?: string[] | null;
+  about_me?: string[] | null;
+  services?: string[] | null;
+  place_of_service?: string[] | null;
+  attention_to?: string[] | null;
+  category?: {
+    slug?: string | null;
+  } | null;
+}
+
+async function readUploadError(response: Response) {
+  const fallback = `${response.status} ${response.statusText}`.trim();
+  const body = await response.text();
+
+  if (!body) return fallback || "Unknown upload error";
+
+  try {
+    const parsed = JSON.parse(body) as { message?: string; error?: string };
+    return parsed.message || parsed.error || body;
+  } catch {
+    return body;
+  }
 }
 
 const DEMO_SERVICES = [
@@ -81,9 +135,14 @@ export default function ListingEditorClient({
     setPlaceOfService(placeOfService.includes(pl) ? placeOfService.filter((p) => p !== pl) : [...placeOfService, pl]);
   const toggleAttention = (att: string) =>
     setAttentionTo(attentionTo.includes(att) ? attentionTo.filter((a) => a !== att) : [...attentionTo, att]);
-  const removeImage = (url: string) => setImages(images.filter((img) => img !== url));
+  const removeImage = (url: string) => {
+    if (isPending || isUploading) return;
+    setImages(images.filter((img) => img !== url));
+  };
 
   const handleMultipleFilesUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (isPending || isUploading) return;
+
     const files = e.target.files;
     if (!files || files.length === 0) return;
     if (images.length + files.length > 7) {
@@ -94,14 +153,25 @@ export default function ListingEditorClient({
     const toastId = toast.loading(`Uploading ${files.length} image(s)...`);
     try {
       const uploadedUrls: string[] = [];
+      const failedUploads: string[] = [];
+
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         if (file.size > 5 * 1024 * 1024) {
-          toast.error(`"${file.name}" is too large. Max 5MB.`);
+          failedUploads.push(`"${file.name}" is too large. Max 5MB.`);
           continue;
         }
+        if (!file.type.startsWith("image/")) {
+          failedUploads.push(`"${file.name}" is not an image file.`);
+          continue;
+        }
+
         const authRes = await fetch("/api/imagekit/auth");
-        if (!authRes.ok) throw new Error("ImageKit auth failed");
+        if (!authRes.ok) {
+          const errorMessage = await readUploadError(authRes);
+          throw new Error(`ImageKit auth failed: ${errorMessage}`);
+        }
+
         const { signature, token, expire } = await authRes.json();
         const formData = new FormData();
         formData.append("file", file);
@@ -112,15 +182,39 @@ export default function ListingEditorClient({
         formData.append("expire", expire);
         formData.append("folder", "oklute-listings");
         const uploadRes = await fetch("https://upload.imagekit.io/api/v1/files/upload", { method: "POST", body: formData });
-        if (!uploadRes.ok) throw new Error(`Failed uploading "${file.name}"`);
+        if (!uploadRes.ok) {
+          const errorMessage = await readUploadError(uploadRes);
+          failedUploads.push(`"${file.name}" failed: ${errorMessage}`);
+          continue;
+        }
+
         const uploadData = await uploadRes.json();
-        uploadedUrls.push(uploadData.url);
+        if (typeof uploadData.url === "string" && uploadData.url) {
+          uploadedUrls.push(uploadData.url);
+        } else {
+          failedUploads.push(`"${file.name}" uploaded but ImageKit did not return a URL.`);
+        }
       }
-      setImages([...images, ...uploadedUrls]);
-      toast.success("Images uploaded!", { id: toastId });
-    } catch (err: any) {
+
+      if (uploadedUrls.length > 0) {
+        setImages((currentImages) => [...currentImages, ...uploadedUrls]);
+      }
+
+      if (failedUploads.length > 0) {
+        console.error("Some listing image uploads failed:", failedUploads);
+        const firstError = failedUploads[0];
+        if (uploadedUrls.length > 0) {
+          toast.error(`Uploaded ${uploadedUrls.length}; ${failedUploads.length} failed. ${firstError}`, { id: toastId });
+        } else {
+          toast.error(firstError, { id: toastId });
+        }
+      } else {
+        toast.success("Images uploaded!", { id: toastId });
+      }
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Upload failed.";
       console.error(err);
-      toast.error(err.message || "Upload failed.", { id: toastId });
+      toast.error(message, { id: toastId });
     } finally {
       setIsUploading(false);
       e.target.value = "";
@@ -129,6 +223,7 @@ export default function ListingEditorClient({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (isUploading) return toast.error("Please wait for the image upload to finish.");
     if (!title) return toast.error("Ad Title is required.");
     if (images.length === 0) return toast.error("At least 1 profile image is required.");
     if (!categoryId || !cityId) return toast.error("Please select a valid Category and Location.");
@@ -244,8 +339,8 @@ export default function ListingEditorClient({
                 </div>
               ))}
               {images.length < 7 && (
-                <div onClick={() => !isUploading && document.getElementById("bundle-file")?.click()}
-                  className={`aspect-[3/4] border-2 border-dashed border-border/80 rounded-xl flex flex-col items-center justify-center cursor-pointer p-4 text-center bg-card ${isUploading ? "pointer-events-none opacity-50" : ""}`}>
+                <div onClick={() => !isUploading && !isPending && document.getElementById("bundle-file")?.click()}
+                  className={`aspect-[3/4] border-2 border-dashed border-border/80 rounded-xl flex flex-col items-center justify-center cursor-pointer p-4 text-center bg-card ${(isUploading || isPending) ? "pointer-events-none opacity-50" : ""}`}>
                   {isUploading ? <Loader2 className="w-6 h-6 text-[#cf4f41] animate-spin" /> : (
                     <>
                       <Upload className="w-6 h-6 text-muted-foreground mb-1" />
@@ -255,7 +350,7 @@ export default function ListingEditorClient({
                 </div>
               )}
             </div>
-            <input id="bundle-file" type="file" multiple onChange={handleMultipleFilesUpload} accept="image/*" className="hidden" />
+            <input id="bundle-file" type="file" multiple onChange={handleMultipleFilesUpload} accept="image/*" disabled={isUploading || isPending} className="hidden" />
           </div>
 
           {/* Bullets */}
@@ -380,8 +475,14 @@ export default function ListingEditorClient({
             </div>
             <div className="pt-4 border-t border-border/80">
               <button type="submit" disabled={isPending || isUploading}
-                className="w-full bg-[#cf4f41] hover:bg-[#b03d31] disabled:opacity-50 text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 cursor-pointer">
-                {isPending ? <><Loader2 className="w-5 h-5 animate-spin" /><span>Saving...</span></> : <><Save className="w-5 h-5" /><span>Save Changes</span></>}
+                className="w-full bg-[#cf4f41] hover:bg-[#b03d31] disabled:opacity-50 text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed">
+                {isPending ? (
+                  <><Loader2 className="w-5 h-5 animate-spin" /><span>Saving...</span></>
+                ) : isUploading ? (
+                  <><Loader2 className="w-5 h-5 animate-spin" /><span>Uploading Images...</span></>
+                ) : (
+                  <><Save className="w-5 h-5" /><span>Save Changes</span></>
+                )}
               </button>
             </div>
           </div>

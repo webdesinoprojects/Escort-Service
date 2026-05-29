@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useSyncExternalStore } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -9,11 +9,9 @@ import {
   ChevronLeft,
   User, 
   MapPin, 
-  Calendar,
   MessageSquare,
   Phone,
   Heart,
-  Share2,
   AlertTriangle,
   X
 } from "lucide-react";
@@ -34,6 +32,10 @@ const CITY_TO_STATE: Record<string, string> = {
   Delhi: "Delhi",
   Pune: "Maharashtra"
 };
+
+const subscribeToPageUrl = () => () => {};
+const getPageUrl = () => window.location.href;
+const getServerPageUrl = () => "";
 
 export default function AdDetails({ ad, categorySlug }: AdDetailsProps) {
   const router = useRouter();
@@ -101,10 +103,7 @@ export default function AdDetails({ ad, categorySlug }: AdDetailsProps) {
   const whatsappUrl = `https://wa.me/${ad.phone.replace(/[^0-9]/g, "")}`;
 
   // Share URLs need window.location, which is client-only — compute after mount to avoid hydration mismatch
-  const [pageUrl, setPageUrl] = useState("");
-  useEffect(() => {
-    setPageUrl(window.location.href);
-  }, []);
+  const pageUrl = useSyncExternalStore(subscribeToPageUrl, getPageUrl, getServerPageUrl);
   const shareTwitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(pageUrl)}&text=${encodeURIComponent(ad.title)}`;
   const shareWhatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(ad.title + " " + pageUrl)}`;
 
@@ -112,7 +111,7 @@ export default function AdDetails({ ad, categorySlug }: AdDetailsProps) {
     <div className="flex flex-col min-h-screen bg-white font-sans text-gray-800">
       
       {/* Header NAVBAR */}
-      <Header />
+      <Header initialCategory={categorySlug} initialCity={ad.city} />
 
       {/* Main Container */}
       <div className="max-w-5xl w-full mx-auto px-6 sm:px-12 py-8 flex-1">

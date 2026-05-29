@@ -1,8 +1,19 @@
 import { NextResponse } from "next/server";
 import ImageKit from "imagekit";
+import { createClient } from "@/server/db/supabase";
 
 export async function GET() {
   try {
+    const supabase = await createClient();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
     const publicKey = process.env.IMAGEKIT_PUBLIC_KEY;
     const privateKey = process.env.IMAGEKIT_PRIVATE_KEY;
     const urlEndpoint = process.env.IMAGEKIT_URL_ENDPOINT;

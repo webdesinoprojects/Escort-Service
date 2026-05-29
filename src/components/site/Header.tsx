@@ -7,16 +7,22 @@ import FilterModal from "./FilterModal";
 
 interface HeaderProps {
   showSearchIcon?: boolean;
+  initialCategory?: string;
+  initialCity?: string;
 }
 
-export default function Header({ showSearchIcon = true }: HeaderProps) {
+export default function Header({
+  showSearchIcon = true,
+  initialCategory,
+  initialCity,
+}: HeaderProps) {
   const router = useRouter();
   const params = useParams();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   // Resolve category and city from URL path if present
-  const categorySlug = (params?.categorySlug as string) || undefined;
-  const citySlug = (params?.citySlug as string) || undefined;
+  const categorySlug = initialCategory || (params?.categorySlug as string) || undefined;
+  const citySlug = initialCity || (params?.citySlug as string) || undefined;
 
   return (
     <>
@@ -47,7 +53,10 @@ export default function Header({ showSearchIcon = true }: HeaderProps) {
               className="w-6 h-6 text-[#202e4d] cursor-pointer hover:opacity-75 transition-opacity" 
             />
           )}
-          <User className="w-6 h-6 text-[#202e4d] cursor-pointer hover:opacity-75 transition-opacity" />
+          <User
+            onClick={() => router.push("/admin")}
+            className="w-6 h-6 text-[#202e4d] cursor-pointer hover:opacity-75 transition-opacity"
+          />
           <button 
             onClick={() => router.push("/")}
             className="bg-[#202e4d] hover:bg-[#162036] active:scale-95 text-white text-xs font-bold tracking-wide px-5 py-3 rounded transition-all uppercase shadow-sm"

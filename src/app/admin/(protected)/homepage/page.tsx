@@ -12,6 +12,7 @@ export default function HeroCmsPage() {
   const [heroSubtitle, setHeroSubtitle] = useState("");
   const [heroImageUrl, setHeroImageUrl] = useState("");
   const [loading, setLoading] = useState(true);
+  const [isImageUploading, setIsImageUploading] = useState(false);
 
   useEffect(() => {
     getHeroSettings().then((settings) => {
@@ -27,6 +28,11 @@ export default function HeroCmsPage() {
 
     if (!heroTitle || !heroSubtitle || !heroImageUrl) {
       toast.error("Please fill in all fields.");
+      return;
+    }
+
+    if (isImageUploading) {
+      toast.error("Please wait for the image upload to finish.");
       return;
     }
 
@@ -95,6 +101,8 @@ export default function HeroCmsPage() {
           <ImageKitUploader 
             value={heroImageUrl} 
             onChange={setHeroImageUrl}
+            onUploadingChange={setIsImageUploading}
+            disabled={isPending}
             folder="oklute-hero"
           />
         </div>
@@ -102,13 +110,18 @@ export default function HeroCmsPage() {
         <div className="pt-4 border-t border-border/80 flex justify-end">
           <button
             type="submit"
-            disabled={isPending}
+            disabled={isPending || isImageUploading}
             className="bg-[#cf4f41] hover:bg-[#b03d31] active:scale-98 disabled:opacity-50 text-white font-bold px-6 py-3 rounded-xl transition-all shadow-md flex items-center gap-2 cursor-pointer font-heading tracking-wide"
           >
             {isPending ? (
               <>
                 <Loader2 className="w-5 h-5 animate-spin" />
                 <span>Saving Changes...</span>
+              </>
+            ) : isImageUploading ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                <span>Uploading Image...</span>
               </>
             ) : (
               <>

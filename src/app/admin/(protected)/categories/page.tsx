@@ -3,7 +3,7 @@
 import { useState, useEffect, useTransition } from "react";
 import { getCategories, upsertCategory, deleteCategory } from "@/server/actions/admin";
 import ImageKitUploader from "@/components/admin/ImageKitUploader";
-import { Loader2, Plus, Edit2, Trash2, Layers, Save, X, Eye } from "lucide-react";
+import { Loader2, Plus, Edit2, Trash2, Layers, Save, X } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
 
@@ -34,6 +34,7 @@ export default function CategoriesCmsPage() {
   const [imageUrl, setImageUrl] = useState("");
   const [iconName, setIconName] = useState("Flame");
   const [orderIndex, setOrderIndex] = useState(0);
+  const [isImageUploading, setIsImageUploading] = useState(false);
 
   const fetchCats = () => {
     setLoading(true);
@@ -44,10 +45,21 @@ export default function CategoriesCmsPage() {
   };
 
   useEffect(() => {
-    fetchCats();
+    let isMounted = true;
+
+    getCategories().then((data) => {
+      if (!isMounted) return;
+      setCategories(data);
+      setLoading(false);
+    });
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const openAddModal = () => {
+    setIsImageUploading(false);
     setEditingCategory(null);
     setTitle("");
     setSlug("");
@@ -59,6 +71,7 @@ export default function CategoriesCmsPage() {
   };
 
   const openEditModal = (cat: Category) => {
+    setIsImageUploading(false);
     setEditingCategory(cat);
     setTitle(cat.title);
     setSlug(cat.slug);
@@ -101,6 +114,11 @@ export default function CategoriesCmsPage() {
 
     if (!title || !slug) {
       toast.error("Title and Slug are required.");
+      return;
+    }
+
+    if (isImageUploading) {
+      toast.error("Please wait for the image upload to finish.");
       return;
     }
 
@@ -228,7 +246,7 @@ export default function CategoriesCmsPage() {
             }
           `}} />
           {/* Overlay background to close drawer */}
-          <div className="absolute inset-0 bg-transparent" onClick={() => setIsModalOpen(false)} />
+          <div className="absolute inset-0 bg-transparent" onClick={() => !isImageUploading && setIsModalOpen(false)} />
           
           <div className="relative w-full max-w-md h-full bg-card border-l border-border/80 shadow-2xl flex flex-col drawer-slide-in">
             {/* Drawer Header */}
@@ -237,8 +255,9 @@ export default function CategoriesCmsPage() {
                 {editingCategory ? "Edit Category Card" : "Add New Category Card"}
               </h3>
               <button 
-                onClick={() => setIsModalOpen(false)}
-                className="p-1 rounded hover:bg-muted text-muted-foreground cursor-pointer"
+                onClick={() => !isImageUploading && setIsModalOpen(false)}
+                disabled={isImageUploading}
+                className="p-1 rounded hover:bg-muted text-muted-foreground cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -307,6 +326,8 @@ export default function CategoriesCmsPage() {
                   <ImageKitUploader 
                     value={imageUrl} 
                     onChange={setImageUrl}
+                    onUploadingChange={setIsImageUploading}
+                    disabled={isPending}
                     folder="oklute-categories"
                   />
                 </div>
@@ -317,19 +338,25 @@ export default function CategoriesCmsPage() {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2.5 border border-border/80 text-foreground font-bold rounded-xl hover:bg-muted text-sm transition-colors cursor-pointer"
+                  disabled={isImageUploading}
+                  className="px-4 py-2.5 border border-border/80 text-foreground font-bold rounded-xl hover:bg-muted text-sm transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  disabled={isPending}
-                  className="bg-[#cf4f41] hover:bg-[#b03d31] active:scale-98 disabled:opacity-50 text-white font-bold px-5 py-2.5 rounded-xl transition-all shadow-md flex items-center gap-1.5 cursor-pointer text-sm font-heading"
+                  disabled={isPending || isImageUploading}
+                  className="bg-[#cf4f41] hover:bg-[#b03d31] active:scale-98 disabled:opacity-50 text-white font-bold px-5 py-2.5 rounded-xl transition-all shadow-md flex items-center gap-1.5 cursor-pointer disabled:cursor-not-allowed text-sm font-heading"
                 >
                   {isPending ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
                       <span>Saving...</span>
+                    </>
+                  ) : isImageUploading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Uploading...</span>
                     </>
                   ) : (
                     <>
