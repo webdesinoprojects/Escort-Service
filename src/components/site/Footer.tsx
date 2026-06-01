@@ -138,6 +138,45 @@ export default function Footer() {
 
 
 
+        {/* Links columns */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-8 border-b border-gray-100 pb-12 mb-12 select-none">
+          {/* Top Categories */}
+          <div className="space-y-4">
+            <h4 className="text-[#202e4d] font-bold text-sm tracking-wide uppercase">Top Categories</h4>
+            <ul className="space-y-2.5 text-gray-400 text-sm font-semibold">
+              <li><a href="/call-girls" className="hover:text-[#cf4f41] transition-colors">Call Girls</a></li>
+              <li><a href="/massage" className="hover:text-[#cf4f41] transition-colors">Massage</a></li>
+              <li><a href="/male-escorts" className="hover:text-[#cf4f41] transition-colors">Male Escorts</a></li>
+              <li><a href="/transsexual" className="hover:text-[#cf4f41] transition-colors">Transsexual</a></li>
+              <li><a href="/adult-meetings" className="hover:text-[#cf4f41] transition-colors">Adult Meetings</a></li>
+            </ul>
+          </div>
+
+          {/* Top Cities */}
+          <div className="space-y-4">
+            <h4 className="text-[#202e4d] font-bold text-sm tracking-wide uppercase">Top Cities</h4>
+            <ul className="space-y-2.5 text-gray-400 text-sm font-semibold">
+              <li><a href="/call-girls/delhi" className="hover:text-[#cf4f41] transition-colors">Delhi</a></li>
+              <li><a href="/call-girls/mumbai" className="hover:text-[#cf4f41] transition-colors">Mumbai</a></li>
+              <li><a href="/call-girls/bangalore" className="hover:text-[#cf4f41] transition-colors">Bangalore</a></li>
+              <li><a href="/call-girls/kolkata" className="hover:text-[#cf4f41] transition-colors">Kolkata</a></li>
+              <li><a href="/call-girls/chennai" className="hover:text-[#cf4f41] transition-colors">Chennai</a></li>
+            </ul>
+          </div>
+
+          {/* More Cities */}
+          <div className="space-y-4">
+            <h4 className="text-[#202e4d] font-bold text-sm tracking-wide uppercase">More Cities</h4>
+            <ul className="space-y-2.5 text-gray-400 text-sm font-semibold">
+              <li><a href="/call-girls/hyderabad" className="hover:text-[#cf4f41] transition-colors">Hyderabad</a></li>
+              <li><a href="/call-girls/pune" className="hover:text-[#cf4f41] transition-colors">Pune</a></li>
+              <li><a href="/call-girls/ahmedabad" className="hover:text-[#cf4f41] transition-colors">Ahmedabad</a></li>
+              <li><a href="/call-girls/jaipur" className="hover:text-[#cf4f41] transition-colors">Jaipur</a></li>
+              <li><a href="/call-girls/goa" className="hover:text-[#cf4f41] transition-colors">Goa</a></li>
+            </ul>
+          </div>
+        </div>
+
         {/* Visibility Boost and Countries select */}
         {/*
         <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-6 border-b border-gray-100 pb-12 mb-12 select-none">
