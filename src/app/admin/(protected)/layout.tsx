@@ -15,7 +15,7 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
   }
 
   return (
-    <AdminShellClient userEmail={user.email || "admin@oklute.com"}>
+    <AdminShellClient userEmail={user.email || "admin@escort.com"}>
       {children}
     </AdminShellClient>
   );

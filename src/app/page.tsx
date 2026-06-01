@@ -69,7 +69,7 @@ export default function Home() {
 
   // Settings states loaded from Supabase DB
   const [hero, setHero] = useState({
-    hero_title: "Flying Solo? No Worries\nOklute is made for all.",
+    hero_title: "Flying Solo? No Worries\nEscort is made for all.",
     hero_subtitle: "Search or Post Your Adult Advertisement",
     hero_image_url: "/hero-anime.png"
   });
@@ -167,7 +167,7 @@ export default function Home() {
         {hero.hero_image_url.startsWith("/") ? (
           <Image
             src={hero.hero_image_url}
-            alt="Oklute Hero Background"
+            alt="Escort Hero Background"
             fill
             priority
             className="object-cover object-[center_30%]"
@@ -176,7 +176,7 @@ export default function Home() {
         ) : (
           <Image
             src={hero.hero_image_url}
-            alt="Oklute Hero Background"
+            alt="Escort Hero Background"
             fill
             priority
             className="object-cover object-[center_30%]"
@@ -279,7 +279,7 @@ export default function Home() {
           {/* Welcome Text */}
           <div className="max-w-5xl mx-auto text-center mb-16 select-none">
             <p className="text-gray-500 text-sm sm:text-base leading-relaxed font-sans text-justify md:text-center max-w-4xl mx-auto">
-              Welcome to Oklute – Your trusted brand for adult classified ads in India. Do you want to relish some erotic and sensual escort services? Rely on Oklute, a portal of real classified ads for independent call girls Bangalore, sexual meeting, massage services, VIP escort services in Delhi, Mumbai, and other cities. Browse all categories to locate call boys, transsexual, swinger meeting, gay escorts, and adult meeting. Oklute also publishes the ads for Video Sex Service. Find it all on Oklute in just a one click. Looking for clients for your services? Post your profiles and classified ads absolutely FREE.
+              Welcome to Escort – Your trusted brand for adult classified ads in India. Do you want to relish some erotic and sensual escort services? Rely on Escort, a portal of real classified ads for independent call girls Bangalore, sexual meeting, massage services, VIP escort services in Delhi, Mumbai, and other cities. Browse all categories to locate call boys, transsexual, swinger meeting, gay escorts, and adult meeting. Escort also publishes the ads for Video Sex Service. Find it all on Escort in just a one click. Looking for clients for your services? Post your profiles and classified ads absolutely FREE.
             </p>
           </div>
 

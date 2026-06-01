@@ -115,14 +115,12 @@ export default function Footer() {
           
           {/* Left side: Logo & RTA badge */}
           <div className="flex flex-col gap-5 select-none">
-            <div className="flex items-center gap-2">
-              <svg width="34" height="34" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
-                <circle cx="35" cy="32" r="12" fill="#d9574a" />
-                <path d="M15 75 C 15 50, 55 50, 55 75 Z" fill="#d9574a" />
-                <circle cx="65" cy="32" r="12" fill="#202e4d" />
-                <path d="M45 75 C 45 50, 85 50, 85 75 Z" fill="#202e4d" />
-              </svg>
-              <span className="text-[28px] font-extrabold text-[#202e4d] tracking-tight">Oklute</span>
+            <div className="flex items-center gap-2.5">
+              <img src="/logo.png" alt="Escort Logo" className="h-24 w-auto shrink-0" />
+              <div className="text-[34px] font-extrabold tracking-tight leading-none pt-1">
+                <span className="text-blue-600">Es</span>
+                <span className="text-black">cort.</span>
+              </div>
             </div>
             
             {/* RTA restricted to adults badge */}
@@ -134,65 +132,20 @@ export default function Footer() {
 
           {/* Right side: Description paragraph */}
           <div className="max-w-3xl text-gray-500 text-sm leading-relaxed font-sans text-justify lg:text-left select-none">
-            Oklute stands as the leading advertising platform for independent escorts globally. Explore a multitude of new advertisements from attractive escorts across the globe. Oklute operates in <span className="text-[#cf4f41] font-bold">28 countries</span>, providing a vast selection for users seeking escort services.
+            Escort stands as the go-to advertising platform for independent escorts worldwide. Discover a world of fresh ads from captivating escorts across the globe. With a presence in <span className="text-[#cf4f41] font-bold">28 countries</span>, Escort delivers an unmatched selection for anyone seeking escort services.
           </div>
         </div>
 
-        {/* Links columns */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 border-b border-gray-100 pb-12 mb-12 select-none">
-          {/* Legal */}
-          <div className="space-y-4">
-            <h4 className="text-[#202e4d] font-bold text-sm tracking-wide">Legal</h4>
-            <ul className="space-y-2.5 text-gray-400 text-sm font-semibold">
-              <li><a href="#" className="hover:text-[#cf4f41] transition-colors">Terms and Conditions</a></li>
-              <li><a href="#" className="hover:text-[#cf4f41] transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-[#cf4f41] transition-colors">Cookie Policy</a></li>
-            </ul>
-          </div>
 
-          {/* Support */}
-          <div className="space-y-4">
-            <h4 className="text-[#202e4d] font-bold text-sm tracking-wide">Support</h4>
-            <ul className="space-y-2.5 text-gray-400 text-sm font-semibold">
-              <li><a href="#" className="hover:text-[#cf4f41] transition-colors">Contact us</a></li>
-              <li><a href="#" className="hover:text-[#cf4f41] transition-colors">Help Center</a></li>
-              <li><a href="#" className="hover:text-[#cf4f41] transition-colors">Blog</a></li>
-            </ul>
-          </div>
-
-          {/* Security */}
-          <div className="space-y-4">
-            <h4 className="text-[#202e4d] font-bold text-sm tracking-wide">Security</h4>
-            <ul className="space-y-2.5 text-gray-400 text-sm font-semibold">
-              <li><a href="#" className="hover:text-[#cf4f41] transition-colors">How to report a scam</a></li>
-            </ul>
-          </div>
-
-          {/* Company */}
-          <div className="space-y-4">
-            <h4 className="text-[#202e4d] font-bold text-sm tracking-wide">Company</h4>
-            <ul className="space-y-2.5 text-gray-400 text-sm font-semibold">
-              <li><a href="#" className="hover:text-[#cf4f41] transition-colors">Incontro Elegante</a></li>
-              <li><a href="#" className="hover:text-[#cf4f41] transition-colors">Oklute Network</a></li>
-            </ul>
-          </div>
-        </div>
 
         {/* Visibility Boost and Countries select */}
+        {/*
         <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-6 border-b border-gray-100 pb-12 mb-12 select-none">
-          {/* Boost visibility */}
-          <div className="flex-1 max-w-md">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">Boost your visibility</h4>
-            <button className="bg-[#202e4d] hover:bg-[#162036] active:scale-98 text-white font-bold py-3.5 px-8 rounded-lg text-center cursor-pointer select-none uppercase tracking-wide w-full transition-all">
-              POST YOUR AD
-            </button>
-          </div>
 
-          {/* Countries select */}
+
           <div className="flex-1 max-w-md relative select-none">
             <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">Countries</h4>
             
-            {/* Trigger */}
             <div 
               onClick={() => setIsCountryDropdownOpen(!isCountryDropdownOpen)}
               className="border border-gray-200 rounded-lg p-3.5 flex items-center justify-between text-sm text-gray-600 bg-white font-semibold cursor-pointer w-full hover:border-gray-300 transition-colors"
@@ -207,7 +160,6 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* Dropdown Menu (Opens upwards) */}
             {isCountryDropdownOpen && (
               <div className="absolute bottom-full left-0 right-0 mb-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-[220px] overflow-y-auto py-1">
                 {countries.map((country) => {
@@ -233,31 +185,9 @@ export default function Footer() {
             )}
           </div>
         </div>
+        */}
 
-        {/* Softell UK copyright info and Payment logos */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 pb-12 select-none">
-          {/* Softell text */}
-          <div className="text-gray-400 text-xs font-medium max-w-2xl leading-relaxed">
-            SOFTELL LIMITED - 42a Riverside workshops Pipe House Wharf Morfa Road The Strand SA1 2EN Swansea UK, Registration Number: 01726537
-          </div>
 
-          {/* Payment methods */}
-          <div className="flex items-center gap-3">
-            {/* Mastercard circles */}
-            <div className="flex items-center">
-              <svg width="36" height="22" viewBox="0 0 36 22" className="shrink-0" aria-label="Mastercard">
-                <circle cx="11" cy="11" r="11" fill="#EB001B" />
-                <circle cx="25" cy="11" r="11" fill="#F79E1B" fillOpacity="0.85" />
-              </svg>
-            </div>
-            {/* Visa text */}
-            <div className="flex items-center text-[#1A1F71]">
-              <svg width="45" height="15" viewBox="0 0 45 15" className="shrink-0" fill="currentColor" aria-label="Visa">
-                <path d="M18.2 0.3L15.9 14.7H12.3L10.1 2.8C9.5 1.5 8.9 1 7.6 0.9L5.4 0.8V0.3H11.2C12.5 0.3 13.5 1.2 13.7 2.5L14.7 9.8L18.4 0.3H18.2ZM24.5 10C24.5 6.3 19.3 6.1 19.3 4.4C19.3 3.9 19.8 3.3 20.9 3.2C21.4 3.1 22.9 3.1 24.5 3.8L25.1 0.7C23.6 0.2 21.8 0 19.8 0C16.3 0 13.8 1.9 13.8 5.1C13.8 8.8 19 9 19 11.2C19 11.9 18.2 12.3 17.2 12.5C16.2 12.7 14.6 12.5 13.2 11.8L12.6 14.9C14.3 15.6 16.5 15.8 18.5 15.8C22.1 15.8 24.5 13.9 24.5 10ZM31.1 0.3H28.3L22.9 14.7H26.3L27 12.7H31.1L31.5 14.7H34.5L31.1 0.3ZM27.9 9.8L29.7 4.1L30.7 9.8H27.9ZM5.6 0.3L0.2 14.7H3.6L9 0.3H5.6Z" />
-              </svg>
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* Dark blue bottom-most bar */}
@@ -306,7 +236,7 @@ export default function Footer() {
 
           {/* Copyright text */}
           <div className="text-white/60 text-xs font-semibold tracking-wide">
-            Copyright 2026 © Oklute
+            Copyright 2026 © Escort
           </div>
         </div>
       </div>

@@ -137,22 +137,22 @@ export default function CategoryDetails({ categorySlug, citySlug }: CategoryDeta
 
       {/* BREADCRUMBS & HEADING */}
       <section className="pt-8 pb-6 px-6 sm:px-12 max-w-5xl mx-auto w-full select-none">
-        {/* Dynamic Breadcrumbs matching Oklute hierarchy */}
+        {/* Dynamic Breadcrumbs matching Escort hierarchy */}
         {citySlug && CITY_INFO[citySlug.toLowerCase()] ? (
           <div className="flex flex-wrap items-center gap-1 text-xs text-[#cf4f41] font-semibold mb-4">
-            <Link href="/" className="hover:underline">Oklute India</Link>
-            <ChevronRight className="w-3 h-3 text-gray-400" />
-            <Link href={`/${categorySlug}`} className="hover:underline">{category}</Link>
-            <ChevronRight className="w-3 h-3 text-gray-400" />
-            <span className="text-gray-400 font-bold">{CITY_INFO[citySlug.toLowerCase()].state} {category}</span>
-            <ChevronRight className="w-3 h-3 text-gray-400" />
-            <span className="text-gray-500 font-bold">{CITY_INFO[citySlug.toLowerCase()].label} {category}</span>
+            <Link href="/" className="hover:underline">Escort India</Link>
+              <ChevronRight className="w-3 h-3 text-gray-400" />
+              <Link href={`/${categorySlug}`} className="hover:underline">{category}</Link>
+              <ChevronRight className="w-3 h-3 text-gray-400" />
+              <span className="text-gray-400 font-bold">{CITY_INFO[citySlug.toLowerCase()].state} {category}</span>
+              <ChevronRight className="w-3 h-3 text-gray-400" />
+              <span className="text-gray-500 font-bold">{CITY_INFO[citySlug.toLowerCase()].label} {category}</span>
           </div>
         ) : (
           <div className="flex items-center gap-1 text-xs text-[#cf4f41] font-semibold mb-4">
-            <Link href="/" className="hover:underline">Oklute India</Link>
-            <ChevronRight className="w-3 h-3 text-gray-400" />
-            <span className="text-gray-500 font-bold">{category}</span>
+            <Link href="/" className="hover:underline">Escort India</Link>
+              <ChevronRight className="w-3 h-3 text-gray-400" />
+              <span className="text-gray-500 font-bold">{category}</span>
           </div>
         )}
 

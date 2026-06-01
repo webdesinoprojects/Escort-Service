@@ -40,16 +40,14 @@ export default function AdminLoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12 font-sans select-none">
       <div className="w-full max-w-md bg-card border border-border/80 rounded-2xl shadow-xl p-8 flex flex-col items-center">
         {/* Logo */}
-        <div className="flex items-center gap-1.5 mb-6">
-          <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0 animate-pulse">
-            <circle cx="35" cy="32" r="12" fill="#cf4f41" />
-            <path d="M15 75 C 15 50, 55 50, 55 75 Z" fill="#cf4f41" />
-            <circle cx="65" cy="32" r="12" fill="#202e4d" />
-            <path d="M45 75 C 45 50, 85 50, 85 75 Z" fill="#202e4d" />
-          </svg>
-          <div className="flex flex-col justify-center leading-none">
-            <span className="text-[28px] font-extrabold text-[#202e4d] dark:text-white tracking-tight font-heading">Oklute</span>
-            <span className="text-[10px] font-bold text-[#f06e2e] tracking-widest uppercase mt-0.5">Control Center</span>
+        <div className="flex items-center gap-2 mb-6">
+          <img src="/logo.png" alt="Escort Logo" className="h-[80px] w-auto animate-pulse shrink-0" />
+          <div className="flex flex-col leading-none pt-1">
+            <div className="text-[36px] font-extrabold tracking-tight leading-none">
+              <span className="text-blue-600">Es</span>
+              <span className="text-black dark:text-white">cort.</span>
+            </div>
+            <span className="text-[10px] font-bold text-gray-500 tracking-widest uppercase mt-1">Control Center</span>
           </div>
         </div>
 
@@ -74,7 +72,6 @@ export default function AdminLoginPage() {
                 disabled={isPending}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@oklute.com"
                 className="w-full bg-background border border-border/80 rounded-xl py-3 pl-11 pr-4 text-foreground text-sm outline-none focus:border-[#cf4f41] focus:ring-1 focus:ring-[#cf4f41] transition-all font-sans"
               />
             </div>
@@ -89,7 +86,6 @@ export default function AdminLoginPage() {
                 disabled={isPending}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
                 className="w-full bg-background border border-border/80 rounded-xl py-3 pl-11 pr-11 text-foreground text-sm outline-none focus:border-[#cf4f41] focus:ring-1 focus:ring-[#cf4f41] transition-all font-sans"
               />
               <button

@@ -80,17 +80,21 @@ export default function AdminShellClient({ children, userEmail }: AdminShellClie
       >
         {/* Sidebar Header */}
         <div className="flex items-center justify-between h-20 px-6 border-b border-border/80 shrink-0">
-          <div className="flex items-center gap-2 overflow-hidden">
-            <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
-              <circle cx="35" cy="32" r="12" fill="#cf4f41" />
-              <path d="M15 75 C 15 50, 55 50, 55 75 Z" fill="#cf4f41" />
-              <circle cx="65" cy="32" r="12" fill="#202e4d" />
-              <path d="M45 75 C 45 50, 85 50, 85 75 Z" fill="#202e4d" />
-            </svg>
-            {(isSidebarOpen || isMobileOpen) && (
-              <div className="flex flex-col leading-none">
-                <span className="text-xl font-black text-foreground tracking-tight font-heading">Oklute</span>
-                <span className="text-[9px] font-bold text-[#f06e2e] tracking-widest uppercase mt-0.5">Console</span>
+          <div className="flex items-center gap-2.5 overflow-hidden">
+            {(isSidebarOpen || isMobileOpen) ? (
+              <>
+                <img src="/logo.png" alt="Escort Logo" className="h-14 w-auto shrink-0" />
+                <div className="flex flex-col leading-none pt-1">
+                  <div className="text-[26px] font-extrabold tracking-tight leading-none">
+                    <span className="text-blue-600">Es</span>
+                    <span className="text-black dark:text-white">cort.</span>
+                  </div>
+                  <span className="text-[9px] font-bold text-gray-500 tracking-widest uppercase mt-0.5">Console</span>
+                </div>
+              </>
+            ) : (
+              <div className="text-[32px] font-extrabold tracking-tight leading-none">
+                <span className="text-blue-600">Es</span>
               </div>
             )}
           </div>

@@ -122,14 +122,14 @@ export async function getHeroSettings() {
 
     if (error) throw error;
     return data || {
-      hero_title: "Flying Solo? No Worries, Oklute is made for all.",
+      hero_title: "Flying Solo? No Worries, Escort is made for all.",
       hero_subtitle: "Search or Post Your Adult Advertisement",
       hero_image_url: "/hero-anime.png",
     };
   } catch (err) {
     console.error("Failed to fetch site settings:", err);
     return {
-      hero_title: "Flying Solo? No Worries, Oklute is made for all.",
+      hero_title: "Flying Solo? No Worries, Escort is made for all.",
       hero_subtitle: "Search or Post Your Adult Advertisement",
       hero_image_url: "/hero-anime.png",
     };

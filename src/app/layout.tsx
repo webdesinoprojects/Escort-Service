@@ -42,7 +42,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
-  title: "Oklute India",
+  title: "Escort India",
   description: "Free Classified Ads of Escort Services in Your City",
 };
 

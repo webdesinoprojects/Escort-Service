@@ -127,9 +127,9 @@ export default function AdDetails({ ad, categorySlug }: AdDetailsProps) {
           </button>
         </div>
 
-        {/* Red Oklute Breadcrumbs */}
+        {/* Red Escort Breadcrumbs */}
         <div className="flex flex-wrap items-center gap-1 text-xs text-[#cf4f41] font-semibold mb-8 select-none">
-          <Link href="/" className="hover:underline">Oklute India</Link>
+          <Link href="/" className="hover:underline">Escort India</Link>
           <ChevronRight className="w-3 h-3 text-gray-400" />
           <Link href={`/${categorySlug}`} className="hover:underline">{category}</Link>
           <ChevronRight className="w-3 h-3 text-gray-400" />
@@ -421,7 +421,7 @@ export default function AdDetails({ ad, categorySlug }: AdDetailsProps) {
           {/* Report link */}
           <div>
             <a 
-              href={`mailto:report@oklute.com?subject=Report Ad ${ad.id}`}
+              href={`mailto:report@escort.com?subject=Report Ad ${ad.id}`}
               className="flex items-center gap-1.5 text-[#cf4f41] hover:underline"
             >
               <AlertTriangle className="w-4 h-4" />
@@ -441,19 +441,21 @@ export default function AdDetails({ ad, categorySlug }: AdDetailsProps) {
         </div>
 
         {/* OFFICIAL REPORTING WARNING */}
+        {/*
         <section className="border border-[#f8d7da] bg-[#fdf2f2]/60 rounded-xl p-5 mb-6 text-xs text-gray-500 font-semibold leading-relaxed">
           <h4 className="text-[#721c24] font-extrabold flex items-center gap-1.5 mb-2.5 text-sm uppercase tracking-wider select-none">
             🛡️ Official Reporting Channels
           </h4>
           <ul className="list-disc pl-5 space-y-2">
             <li>
-              Send us your email to <a href="mailto:privacy@oklute.com" className="text-[#cf4f41] hover:underline font-bold">privacy@oklute.com</a> if you come through any kind of violation to the intellectual property or inappropriate use of data such as images, phone number, address, name, and/or email id.
+              Send us your email to <a href="mailto:privacy@escort.com" className="text-[#cf4f41] hover:underline font-bold">privacy@escort.com</a> if you come through any kind of violation to the intellectual property or inappropriate use of data such as images, phone number, address, name, and/or email id.
             </li>
             <li>
-              You can send us your email to <a href="mailto:grievance@oklute.com" className="text-[#cf4f41] hover:underline font-bold">grievance@oklute.com</a> if any content seems to be abusive or illegal.
+              You can send us your email to <a href="mailto:grievance@escort.com" className="text-[#cf4f41] hover:underline font-bold">grievance@escort.com</a> if any content seems to be abusive or illegal.
             </li>
           </ul>
         </section>
+        */}
 
         {/* SAFETY TIPS */}
         <section className="bg-[#202e4d] rounded-xl p-5 mb-16 text-white text-xs leading-relaxed select-none">
@@ -461,7 +463,7 @@ export default function AdDetails({ ad, categorySlug }: AdDetailsProps) {
             ⚠️ Security tips
           </h4>
           <p className="font-semibold text-white/90">
-            If you come across imposters, please report them to Oklute and/or the appropriate authorities and block them. Enjoy a safe Oklute experience.
+            If you come across imposters, please report them to Escort and/or the appropriate authorities and block them. Enjoy a safe Escort experience.
           </p>
         </section>
 
