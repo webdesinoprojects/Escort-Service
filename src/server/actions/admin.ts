@@ -124,14 +124,14 @@ export async function getHeroSettings() {
     return data || {
       hero_title: "Flying Solo? No Worries, Escort is made for all.",
       hero_subtitle: "Search or Post Your Adult Advertisement",
-      hero_image_url: "/hero-anime.png",
+      hero_image_url: "",
     };
   } catch (err) {
     console.error("Failed to fetch site settings:", err);
     return {
       hero_title: "Flying Solo? No Worries, Escort is made for all.",
       hero_subtitle: "Search or Post Your Adult Advertisement",
-      hero_image_url: "/hero-anime.png",
+      hero_image_url: "",
     };
   }
 }

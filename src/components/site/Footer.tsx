@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
 interface Country {
   code: string;
@@ -144,11 +145,11 @@ export default function Footer() {
           <div className="space-y-4">
             <h4 className="text-[#202e4d] font-bold text-sm tracking-wide uppercase">Top Categories</h4>
             <ul className="space-y-2.5 text-gray-400 text-sm font-semibold">
-              <li><a href="/call-girls" className="hover:text-[#cf4f41] transition-colors">Call Girls</a></li>
-              <li><a href="/massage" className="hover:text-[#cf4f41] transition-colors">Massage</a></li>
-              <li><a href="/male-escorts" className="hover:text-[#cf4f41] transition-colors">Male Escorts</a></li>
-              <li><a href="/transsexual" className="hover:text-[#cf4f41] transition-colors">Transsexual</a></li>
-              <li><a href="/adult-meetings" className="hover:text-[#cf4f41] transition-colors">Adult Meetings</a></li>
+              <li><Link href="/call-girls" className="hover:text-[#cf4f41] transition-colors">Call Girls</Link></li>
+              <li><Link href="/massage" className="hover:text-[#cf4f41] transition-colors">Massage</Link></li>
+              <li><Link href="/male-escorts" className="hover:text-[#cf4f41] transition-colors">Male Escorts</Link></li>
+              <li><Link href="/transsexual" className="hover:text-[#cf4f41] transition-colors">Transsexual</Link></li>
+              <li><Link href="/adult-meetings" className="hover:text-[#cf4f41] transition-colors">Adult Meetings</Link></li>
             </ul>
           </div>
 
@@ -156,11 +157,11 @@ export default function Footer() {
           <div className="space-y-4">
             <h4 className="text-[#202e4d] font-bold text-sm tracking-wide uppercase">Top Cities</h4>
             <ul className="space-y-2.5 text-gray-400 text-sm font-semibold">
-              <li><a href="/call-girls/delhi" className="hover:text-[#cf4f41] transition-colors">Delhi</a></li>
-              <li><a href="/call-girls/mumbai" className="hover:text-[#cf4f41] transition-colors">Mumbai</a></li>
-              <li><a href="/call-girls/bangalore" className="hover:text-[#cf4f41] transition-colors">Bangalore</a></li>
-              <li><a href="/call-girls/kolkata" className="hover:text-[#cf4f41] transition-colors">Kolkata</a></li>
-              <li><a href="/call-girls/chennai" className="hover:text-[#cf4f41] transition-colors">Chennai</a></li>
+              <li><Link href="/call-girls/delhi" className="hover:text-[#cf4f41] transition-colors">Delhi</Link></li>
+              <li><Link href="/call-girls/mumbai" className="hover:text-[#cf4f41] transition-colors">Mumbai</Link></li>
+              <li><Link href="/call-girls/bangalore" className="hover:text-[#cf4f41] transition-colors">Bangalore</Link></li>
+              <li><Link href="/call-girls/kolkata" className="hover:text-[#cf4f41] transition-colors">Kolkata</Link></li>
+              <li><Link href="/call-girls/chennai" className="hover:text-[#cf4f41] transition-colors">Chennai</Link></li>
             </ul>
           </div>
 
@@ -168,11 +169,11 @@ export default function Footer() {
           <div className="space-y-4">
             <h4 className="text-[#202e4d] font-bold text-sm tracking-wide uppercase">More Cities</h4>
             <ul className="space-y-2.5 text-gray-400 text-sm font-semibold">
-              <li><a href="/call-girls/hyderabad" className="hover:text-[#cf4f41] transition-colors">Hyderabad</a></li>
-              <li><a href="/call-girls/pune" className="hover:text-[#cf4f41] transition-colors">Pune</a></li>
-              <li><a href="/call-girls/ahmedabad" className="hover:text-[#cf4f41] transition-colors">Ahmedabad</a></li>
-              <li><a href="/call-girls/jaipur" className="hover:text-[#cf4f41] transition-colors">Jaipur</a></li>
-              <li><a href="/call-girls/goa" className="hover:text-[#cf4f41] transition-colors">Goa</a></li>
+              <li><Link href="/call-girls/hyderabad" className="hover:text-[#cf4f41] transition-colors">Hyderabad</Link></li>
+              <li><Link href="/call-girls/pune" className="hover:text-[#cf4f41] transition-colors">Pune</Link></li>
+              <li><Link href="/call-girls/ahmedabad" className="hover:text-[#cf4f41] transition-colors">Ahmedabad</Link></li>
+              <li><Link href="/call-girls/jaipur" className="hover:text-[#cf4f41] transition-colors">Jaipur</Link></li>
+              <li><Link href="/call-girls/goa" className="hover:text-[#cf4f41] transition-colors">Goa</Link></li>
             </ul>
           </div>
         </div>
